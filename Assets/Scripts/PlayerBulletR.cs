@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class EnemyBullet : MonoBehaviour
+public class PlayerBulletR : MonoBehaviour
 {
-    public Text bulletText;
+    public float bulletSpeed;
     public GameObject explosion;
 
     // Start is called before the first frame update
@@ -16,18 +15,18 @@ public class EnemyBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += new Vector3(-1.5f,0,0) * Time.deltaTime;
+        transform.position += new Vector3(bulletSpeed,0,0) * Time.deltaTime;
 
-        if(transform.position.x <= -11.5){
+        if(transform.position.x > 11){
             Destroy(gameObject);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.CompareTag("Player")==true){
+        if(collision.CompareTag("Enemy")==true){
             Instantiate(explosion, collision.transform.position, collision.transform.rotation);
         }
-        if(collision.CompareTag("Enemy")==false){
+        if(collision.CompareTag("Player")==false){
             Instantiate(explosion, transform.position, transform.rotation);
             Destroy(gameObject);
             Destroy(collision.gameObject);

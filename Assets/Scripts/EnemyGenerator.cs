@@ -1,40 +1,57 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyGenerator : MonoBehaviour
 {
+    public float spawnTime;
+
     public GameObject enemyPrefab;
     public GameObject enemyBulletPrefab;
-
-    public List<string> liveChatMassegeList = new List<string>();
+    public GetYutubeCommentR youTubeComment;
+    public Queue<string> liveChatMassegeQueue = new Queue<string>();
+    public Queue<string> userIconUrlQueue = new Queue<string>();
+    public List<string> liveChatMassegeLog = new List<string>();
+    public List<string> userIconUrlLog = new List<string>();
     public string textString;
+    public string userIconUrl;
 
     // Start is called before the first frame update
     void Start()
     {
         //コメントを取得するオブジェクトの場所を見つける
-        //GetYutubeComment YouTubeComment = GameObject.Find("YutubeApiAttacheObject").GetComponent<GetYutubeComment>;
+        youTubeComment = GameObject.Find("YutubeApiAttacheObject").GetComponent<GetYutubeCommentR>();
         
         //2s毎に繰り返しEnemyを生成
-        InvokeRepeating("Spawn", 2f, 2f);
+        InvokeRepeating("Spawn", 2f, spawnTime);
     }
 
     //enemyをランダムに生成
     void Spawn()
     {
         //コメントリストの最初の要素を取り出し
-        if(liveChatMassegeList.Count != 0){
-            textString = liveChatMassegeList[0];
-            liveChatMassegeList.RemoveAt(0);
+        if(liveChatMassegeQueue.TryDequeue(out textString)){
+            liveChatMassegeLog.Add(textString);
+            userIconUrl = userIconUrlQueue.Dequeue();
+            userIconUrlLog.Add(userIconUrl);
         }else{
-            //コメントがなければ”コメントがありません”を表示
-            textString = "コメントがありません";
+            int listCount = liveChatMassegeLog.Count;
+            if(listCount > 0){
+                System.Random random = new System.Random();
+                int rnd = random.Next(listCount);
+                textString = liveChatMassegeLog[rnd];
+                userIconUrl = userIconUrlLog[rnd];
+            }else{
+                textString = "コメントがありません";
+                userIconUrl = "NonePng";
+            }
         }
         //生成位置のy座標はRandom.Range()の中で指定
         Vector3 spawnPosition = new Vector3(
             transform.position.x,
-            Random.Range(-2.0f,2.0f),
+            UnityEngine.Random.Range(-4.0f,4.0f),
             transform.position.z
         );
         
@@ -46,6 +63,7 @@ public class EnemyGenerator : MonoBehaviour
     void Update()
     {
         //コメントリストの更新
-        //liveChatMassegeList = YouTubeComment.liveChatMassegeList;
+        liveChatMassegeQueue = youTubeComment.liveChatMassegeQueue;
+        userIconUrlQueue = youTubeComment.userIconUrlQueue;
     }
 }

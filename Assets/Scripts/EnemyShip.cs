@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class EnemyShip : MonoBehaviour
 {
+    public float bulletTime;
+    
     public Transform bulletPos;
     public GameObject enemyBulletPrefab;
     public GameObject explosion;
@@ -27,7 +29,7 @@ public class EnemyShip : MonoBehaviour
         offset = Random.Range(0, 2f * Mathf.PI);
 
         //1s待ってから0.5s間隔で弾を打つ
-        InvokeRepeating("Shooting", 1f, 0.5f);
+        InvokeRepeating("Shooting", 1f, bulletTime);
     }
 
     // Update is called once per frame
@@ -39,6 +41,10 @@ public class EnemyShip : MonoBehaviour
             Mathf.Cos(Time.frameCount * 0.005f + offset) * 0.002f,
             0
             );
+
+        if(transform.position.x < -11.5){
+            Destroy(gameObject);
+        }
     }
 
     //Colliderをつけ、全てのisTrigerにチェックをつける
@@ -59,7 +65,7 @@ public class EnemyShip : MonoBehaviour
             letterQueue2.Enqueue(s);
             enemyBulletPrefab.GetComponent<EnemyBullet>().bulletText.text = s;
             Instantiate(enemyBulletPrefab,
-            bulletPos.position,
+            bulletPos.position +new Vector3(-0.5f,0f,0f),
             Quaternion.Euler(0f,0f,0f));
         }else
         {
