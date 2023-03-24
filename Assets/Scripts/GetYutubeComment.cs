@@ -69,10 +69,15 @@ public class GetYutubeComment : MonoBehaviour
 
 
     string liveChatId;
-    DateTime lastCommentTime = DateTime.Parse("2023 - 03 - 17T04:16:22.484251+00:00");
+
+    TimeZoneInfo timeZoneJst = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+    DateTime lastCommentTime ;
+
 
     void Start()
     {
+        lastCommentTime = TimeZoneInfo.ConvertTime(DateTime.Now, timeZoneJst);
+
         if (isGetComment == true)
         {
             StartCoroutine(GetLiveChatId());
@@ -116,18 +121,7 @@ public class GetYutubeComment : MonoBehaviour
         UnityWebRequest LiveChatData = UnityWebRequest.Get(url);
         yield return LiveChatData.SendWebRequest();
 
-        switch (LiveChatData.result)
-        {
-            case UnityWebRequest.Result.InProgress:
-                Debug.Log("リクエスト中");
-                break;
-            default:
-                Debug.Log("erro");
-                break;
-        }
-
         LiveChatResponse liveChatResponse = JsonUtility.FromJson<LiveChatResponse>(LiveChatData.downloadHandler.text);
-
         for (int i = 0; i < liveChatResponse.items.Length; i++)
         {
 
