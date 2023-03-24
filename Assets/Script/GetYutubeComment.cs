@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System;
 
 [System.Serializable]
-public class VideoResponse{
+public class VideoResponse
+{
     public VideoItems[] items;
 }
 
@@ -62,9 +63,9 @@ public class GetYutubeComment : MonoBehaviour
     [SerializeField] private bool isGetComment=false;
 
     //ライブコメントから取得したコメントリスト
-    public List<string> liveChatMassegeList = new List<string>();
-    //ユーザーのアイコン画像のURL　liveChatMassegeList　と　userIconUrlList　のユーザー情報は対応してます
-    public List<string> userIconUrlList = new List<string>();
+    public Queue<string> liveChatMassegeQueue = new Queue<string>();
+    //ユーザーのアイコン画像のURL　liveChatMassegeQueue　と　userIconUrlQueue　のユーザー情報は対応してます
+    public Queue<string> userIconUrlQueue = new Queue<string>();
 
 
     string liveChatId;
@@ -75,6 +76,7 @@ public class GetYutubeComment : MonoBehaviour
         if (isGetComment == true)
         {
             StartCoroutine(GetLiveChatId());
+            Debug.Log("yutubeAPI使用中です");
         }
     }
 
@@ -119,11 +121,6 @@ public class GetYutubeComment : MonoBehaviour
             case UnityWebRequest.Result.InProgress:
                 Debug.Log("リクエスト中");
                 break;
-            case UnityWebRequest.Result.Success:
-                //成功
-                //Debug.Log(LiveChatData.downloadHandler.text);
-                Debug.Log("成功");
-                break;
             default:
                 Debug.Log("erro");
                 break;
@@ -133,21 +130,18 @@ public class GetYutubeComment : MonoBehaviour
 
         for (int i = 0; i < liveChatResponse.items.Length; i++)
         {
+
             if(lastCommentTime< DateTime.Parse(liveChatResponse.items[i].snippet.publishedAt))
             {
-                liveChatMassegeList.Add(liveChatResponse.items[i].snippet.displayMessage);
-                userIconUrlList.Add(liveChatResponse.items[i].authorDetails.profileImageUrl);
-                //Debug.Log(userIconUrlList[i]);
+                liveChatMassegeQueue.Enqueue(liveChatResponse.items[i].snippet.displayMessage);
+                userIconUrlQueue.Enqueue(liveChatResponse.items[i].authorDetails.profileImageUrl);
             }
 
             if (i== liveChatResponse.items.Length - 1)
             {
                 lastCommentTime = DateTime.Parse(liveChatResponse.items[i].snippet.publishedAt);
-               // Debug.Log(lastCommentTime);
             }
         }
-        //一番最新のコメント表示
-        Debug.Log(liveChatMassegeList[liveChatMassegeList.Count - 1]);
 
         yield return new WaitForSeconds(10.0f);
         yield return GetLiveChatComment();

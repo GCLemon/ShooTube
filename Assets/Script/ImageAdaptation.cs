@@ -10,9 +10,9 @@ public class ImageAdaptation : MonoBehaviour
     //画像を表示させるimage object
     [SerializeField] private RawImage enemyRawImage;
 
-    //GetYutubeCommentクラスにあるユーザのアイコンのurlがつまったuserIconUrlList取得するため
-    //getyutube.userIconUrlListでurlのリスト取得
-    //getyutube.liveChatMassegeListでメッセージのリスト取得 　　アイコンurlとメッセージのリストに入ってるユーザーの順番は対応してます
+    //GetYutubeCommentクラスにあるユーザのアイコンのurlがつまったuserIconUrlQueue取得するため
+    //getyutube.userIconUrlQueueでurlのリスト取得
+    //getyutube.liveChatMassegeQueueでメッセージのリスト取得 　　アイコンurlとメッセージのリストに入ってるユーザーの順番は対応してます
     [SerializeField]  private GetYutubeComment getyutube;
 
     private string imageUrl;
@@ -35,12 +35,12 @@ public class ImageAdaptation : MonoBehaviour
 
     IEnumerator changeIcon()
     {   
-        urlCount = getyutube.userIconUrlList.Count;
+        urlCount = getyutube.userIconUrlQueue.Count;
         //コメント取得できていたら以下実行
         if (urlCount > 0)
         {
-            //一番新しい画像のURL取得
-            imageUrl = getyutube.userIconUrlList[urlCount - 1];
+            //要素を削除しないで取り出して一番初めの要素にある画像のURL取得
+            imageUrl = getyutube.userIconUrlQueue.Peek();
 
             //画像をリクエスト
             UnityWebRequest requestImage = UnityWebRequestTexture.GetTexture(imageUrl);
