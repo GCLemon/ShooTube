@@ -483,6 +483,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2759778047425830996, guid: 4ea2d851dd0ee8147b49d4e7383c8e8e, type: 3}
+      propertyPath: isGetComment
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2759778047425830996, guid: 4ea2d851dd0ee8147b49d4e7383c8e8e, type: 3}
       propertyPath: inputCommentField
       value: 
       objectReference: {fileID: 0}

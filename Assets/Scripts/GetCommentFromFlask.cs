@@ -15,7 +15,7 @@ public class UsersData
 public class Items
 {
     public string comment;
-    public object icon;
+    public string icon;
     public string time;
 }
 
@@ -25,7 +25,6 @@ public class GetCommentFromFlask : MonoBehaviour
     [SerializeField] private GetYutubeComment getYutubeComment;
     [SerializeField] private bool isGetComment=false;
 
-    string queryString="test";
     TimeZoneInfo timeZoneJst = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
     DateTime lastCommentTime;
 
@@ -61,6 +60,7 @@ public class GetCommentFromFlask : MonoBehaviour
                     if (lastCommentTime < DateTime.Parse(usersData.items[i].time))
                     {
                         getYutubeComment.liveChatMassegeQueue.Enqueue(usersData.items[i].comment);
+                        getYutubeComment.userIconUrlQueue.Enqueue(usersData.items[i].icon);
                     }
 
                     if (i == usersData.items.Length - 1)
