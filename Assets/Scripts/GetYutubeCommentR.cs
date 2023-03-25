@@ -52,7 +52,7 @@ public class AuthorDetails
 
 
 
-public class GetYutubeComment : MonoBehaviour
+public class GetYutubeCommentR : MonoBehaviour
 {
     [SerializeField] private string apiKey;
 
@@ -61,10 +61,10 @@ public class GetYutubeComment : MonoBehaviour
 
     [SerializeField] private bool isGetComment=false;
 
-    //ƒ‰ƒCƒuƒRƒƒ“ƒg‚©‚çæ“¾‚µ‚½ƒRƒƒ“ƒgƒŠƒXƒg
-    public List<string> liveChatMassegeList = new List<string>();
-    //ƒ†[ƒU[‚ÌƒAƒCƒRƒ“‰æ‘œ‚ÌURL@liveChatMassegeList@‚Æ@userIconUrlList@‚Ìƒ†[ƒU[î•ñ‚Í‘Î‰‚µ‚Ä‚Ü‚·
-    public List<string> userIconUrlList = new List<string>();
+    //ï¿½ï¿½ï¿½Cï¿½uï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Xï¿½g
+    public Queue<string> liveChatMassegeQueue = new Queue<string>();
+    //ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½ÌƒAï¿½Cï¿½Rï¿½ï¿½ï¿½æ‘œï¿½ï¿½URLï¿½@liveChatMassegeListï¿½@ï¿½Æ@userIconUrlListï¿½@ï¿½Ìƒï¿½ï¿½[ï¿½Uï¿½[ï¿½ï¿½ï¿½Í‘Î‰ï¿½ï¿½ï¿½ï¿½Ä‚Ü‚ï¿½
+    public Queue<string> userIconUrlQueue = new Queue<string>();
 
 
     string liveChatId;
@@ -117,12 +117,12 @@ public class GetYutubeComment : MonoBehaviour
         switch (LiveChatData.result)
         {
             case UnityWebRequest.Result.InProgress:
-                Debug.Log("ƒŠƒNƒGƒXƒg’†");
+                Debug.Log("Requesting");
                 break;
             case UnityWebRequest.Result.Success:
-                //¬Œ÷
+                //ï¿½ï¿½ï¿½ï¿½
                 //Debug.Log(LiveChatData.downloadHandler.text);
-                Debug.Log("¬Œ÷");
+                Debug.Log("Succeeded");
                 break;
             default:
                 Debug.Log("erro");
@@ -135,8 +135,8 @@ public class GetYutubeComment : MonoBehaviour
         {
             if(lastCommentTime< DateTime.Parse(liveChatResponse.items[i].snippet.publishedAt))
             {
-                liveChatMassegeList.Add(liveChatResponse.items[i].snippet.displayMessage);
-                userIconUrlList.Add(liveChatResponse.items[i].authorDetails.profileImageUrl);
+                liveChatMassegeQueue.Enqueue(liveChatResponse.items[i].snippet.displayMessage);
+                userIconUrlQueue.Enqueue(liveChatResponse.items[i].authorDetails.profileImageUrl);
                 //Debug.Log(userIconUrlList[i]);
             }
 
@@ -146,10 +146,10 @@ public class GetYutubeComment : MonoBehaviour
                // Debug.Log(lastCommentTime);
             }
         }
-        //ˆê”ÔÅV‚ÌƒRƒƒ“ƒg•\¦
-        Debug.Log(liveChatMassegeList[liveChatMassegeList.Count - 1]);
+        //ï¿½ï¿½ÔÅVï¿½ÌƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½\ï¿½ï¿½
+        //Debug.Log(liveChatMassegeQueue[liveChatMassegeQueue.Count - 1]);
 
-        yield return new WaitForSeconds(10.0f);
+        yield return new WaitForSeconds(5.0f);
         yield return GetLiveChatComment();
     }
 
