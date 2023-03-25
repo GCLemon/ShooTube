@@ -48,6 +48,7 @@ public class Snippet
 public class AuthorDetails
 {
     public string profileImageUrl;
+    public string displayName;
 }
 
 
@@ -65,13 +66,16 @@ public class GetYutubeCommentR : MonoBehaviour
     public Queue<string> liveChatMassegeQueue = new Queue<string>();
     //���[�U�[�̃A�C�R���摜��URL�@liveChatMassegeList�@�Ɓ@userIconUrlList�@�̃��[�U�[���͑Ή����Ă܂�
     public Queue<string> userIconUrlQueue = new Queue<string>();
+    public Queue<string> userNameQueue = new  Queue<string>();
 
 
     string liveChatId;
-    DateTime lastCommentTime = DateTime.Parse("2023 - 03 - 17T04:16:22.484251+00:00");
+    TimeZoneInfo timeZoneJst = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+    DateTime lastCommentTime ;
 
     void Start()
     {
+        lastCommentTime = TimeZoneInfo.ConvertTime(DateTime.Now, timeZoneJst);
         if (isGetComment == true)
         {
             StartCoroutine(GetLiveChatId());
@@ -110,7 +114,6 @@ public class GetYutubeCommentR : MonoBehaviour
             "part=snippet,authorDetails" + "&" +
             "key=" + apiKey;
 
-
         UnityWebRequest LiveChatData = UnityWebRequest.Get(url);
         yield return LiveChatData.SendWebRequest();
 
@@ -137,6 +140,8 @@ public class GetYutubeCommentR : MonoBehaviour
             {
                 liveChatMassegeQueue.Enqueue(liveChatResponse.items[i].snippet.displayMessage);
                 userIconUrlQueue.Enqueue(liveChatResponse.items[i].authorDetails.profileImageUrl);
+                userNameQueue.Enqueue(liveChatResponse.items[i].authorDetails.displayName);
+                Debug.Log(userNameQueue.Dequeue());
                 //Debug.Log(userIconUrlList[i]);
             }
 
