@@ -56,7 +56,7 @@ using System.Collections;
 
     void Shot()
     {
-        if (Input.GetKeyDown("z"))
+        if (Input.GetKey("z"))
         {
             Instantiate(beamPrefab, bulletPos.position, bulletPos.rotation);
         }
