@@ -25,7 +25,7 @@ public class GetCommentFromFlask : MonoBehaviour
     [SerializeField] private GetYutubeCommentR getYutubeComment;
     [SerializeField] private bool isGetComment=false;
 
-    TimeZoneInfo timeZoneJst = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+    TimeZoneInfo timeZoneJst = TimeZoneInfo.Local;
     DateTime lastCommentTime;
 
 

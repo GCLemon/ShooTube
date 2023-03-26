@@ -20,7 +20,7 @@ public class EnemyShip : MonoBehaviour
     void Start()
     {
         //生成時のコメントを取得し、Queueで1文字ずつ管理
-        textString = GameObject.Find("EnemyGenerator").GetComponent<EnemyGenerator>().textString;
+        textString = GameObject.Find("Wave Manager").GetComponent<WaveManager>().Message;
         for(int i = 0; i < textString.Length; i++){
             string s = textString.Substring(i, 1);
             letterQueue.Enqueue(s);
