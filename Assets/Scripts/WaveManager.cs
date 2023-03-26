@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -29,6 +28,75 @@ public class WaveManager : MonoBehaviour
     // エネミーオブジェクト
     [SerializeField] private EnemyShip _Enemy;
 
+    // メッセージ
+    public string Message
+    {
+        get
+        {
+            if (_YouTube.liveChatMassegeQueue.TryDequeue(out string message))
+            {
+                _MessageList.Add(message);
+                return message;
+            }
+            else if (_MessageList.Count > 0)
+            {
+                int index = Random.Range(0, _MessageList.Count);
+                return _MessageList[index];
+            }
+            else
+            {
+                return "コメントがありません。";
+            }
+        }
+    }
+    private readonly List<string> _MessageList = new();
+
+    // 投稿者のアイコン
+    public string AuthorIcon
+    {
+        get
+        {
+            if (_YouTube.userIconUrlQueue.TryDequeue(out string iconURL))
+            {
+                _AuthorIconList.Add(iconURL);
+                return iconURL;
+            }
+            else if (_AuthorIconList.Count > 0)
+            {
+                int index = Random.Range(0, _AuthorIconList.Count);
+                return _AuthorIconList[index];
+            }
+            else
+            {
+                return "NonePng";
+            }
+        }
+    }
+    private readonly List<string> _AuthorIconList = new();
+
+    // 投稿者のユーザーネーム
+    public string AuthorName
+    {
+        get
+        {
+            if (_YouTube.userNameQueue.TryDequeue(out string name))
+            {
+                _AuthorIconList.Add(name);
+                return name;
+            }
+            else if (_AuthorNameList.Count > 0)
+            {
+                int index = Random.Range(0, _AuthorNameList.Count);
+                return _AuthorNameList[index];
+            }
+            else
+            {
+                return "ANONYMOUS";
+            }
+        }
+    }
+    private readonly List<string> _AuthorNameList = new();
+
     // 初期化時の処理
     private void Start()
     {
@@ -57,6 +125,7 @@ public class WaveManager : MonoBehaviour
     // 更新時の処理
     private void Update()
     {
+        // スコア表示の更新
         _ScoreText.text = string.Format("{0:D10}", _Score);
     }
 

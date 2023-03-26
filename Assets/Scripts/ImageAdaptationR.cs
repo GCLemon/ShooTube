@@ -13,7 +13,7 @@ public class ImageAdaptationR : MonoBehaviour
     //GetYutubeComment�N���X�ɂ��郆�[�U�̃A�C�R����url���܂���userIconUrlList�擾���邽��
     //getyutube.userIconUrlList��url�̃��X�g�擾
     //getyutube.liveChatMassegeList�Ń��b�Z�[�W�̃��X�g�擾 �@�@�A�C�R��url�ƃ��b�Z�[�W�̃��X�g�ɓ����Ă郆�[�U�[�̏��Ԃ͑Ή����Ă܂�
-    [SerializeField]  private EnemyGenerator getyutube;
+    [SerializeField]  private WaveManager getyutube;
 
     private string imageUrl;
     //�摜��url�̐�
@@ -23,7 +23,7 @@ public class ImageAdaptationR : MonoBehaviour
 
     void Start()
     {
-        getyutube = GameObject.Find("EnemyGenerator").GetComponent<EnemyGenerator>();
+        getyutube = GameObject.Find("Wave Manager").GetComponent<WaveManager>();
 
         enemytexture = new Texture2D(5, 5);
 
@@ -35,7 +35,7 @@ public class ImageAdaptationR : MonoBehaviour
 
     IEnumerator ChangeIcon()
     {   
-        imageUrl = getyutube.userIconUrl;
+        imageUrl = getyutube.AuthorIcon;
         if (imageUrl != "NonePng")
         {
             UnityWebRequest requestImage = UnityWebRequestTexture.GetTexture(imageUrl);

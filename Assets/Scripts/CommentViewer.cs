@@ -10,13 +10,16 @@ public class CommentViewer : MonoBehaviour
 {
     [SerializeField] private CommentItem _CommentItemPrefab;
 
+    private List<CommentItem> _Comments;
+
     [SerializeField] private Texture2D _DefaultTexture;
 
-    private List<CommentItem> _Comments;
+    [SerializeField] private GetYutubeCommentR _YouTube;
 
     private void Start()
     {
         _Comments = new();
+        _YouTube.RecieveEvent += AppendComment;
     }
 
     // コメントの追加処理
@@ -24,6 +27,7 @@ public class CommentViewer : MonoBehaviour
     {
         // コメントオブジェクトの生成
         CommentItem comment = Instantiate(_CommentItemPrefab);
+        comment.transform.parent = transform;
         _Comments.Add(comment);
 
         // アイコンの設定
@@ -55,12 +59,14 @@ public class CommentViewer : MonoBehaviour
 
         // 描画位置の計算
         float height = content.preferredHeight;
-        comment.transform.localPosition = new Vector3(0, height + 50.0f);
+        comment.transform.localPosition = new Vector3(-310, height + 50.0f, 0);
+
+        Debug.Log(comment);
 
         // すでに描画されたオブジェクトの更新
         foreach(CommentItem c in _Comments)
         {
-            c.transform.localPosition += new Vector3(0, height + 50.0f);
+            c.transform.localPosition += new Vector3(0, height + 50.0f, 0);
             float itemYPosition = c.transform.localPosition.y;
             float itemHeight = c.Content.GetComponent<TextMeshProUGUI>().preferredHeight;
             float windowHeight = Screen.height;
