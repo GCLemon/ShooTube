@@ -45,7 +45,7 @@ public class WaveManager : MonoBehaviour
     private List<EnemyShip> _SpawnedEnemy = new();
 
     [SerializeField] private SubBossEnemy _SubBossEnemy;
-    private List<SubBossEnemy> _SpawnedSubBossEndmy = new();
+    private List<SubBossEnemy> _SpawnedSubBossEnemy = new();
 
     [SerializeField] private BossEnemy _BossEnemy;
     private BossEnemy _SpawnedBossEnemy;
@@ -173,6 +173,7 @@ public class WaveManager : MonoBehaviour
             if(_BossIntervalTime >= 120.0f)
             {
                 _SpawnedBossEnemy = Instantiate(_BossEnemy);
+                _SpawnedBossEnemy.EnemyHit += EnemyHit;
                 _BossEnemy.transform.position = new Vector3(9.6f, 0, 0);
             }
 
@@ -184,24 +185,28 @@ public class WaveManager : MonoBehaviour
                     SubBossEnemy enemy = Instantiate(_SubBossEnemy);
                     float position = Random.Range(-4.0f, 4.0f);
                     enemy.transform.position = new Vector3(9.6f, position, 0);
+                    enemy.EnemyHit += EnemyHit;
                 }
                 else
                 {
                     EnemyShip enemy = Instantiate(_Enemy);
                     float position = Random.Range(-4.0f, 4.0f);
                     enemy.transform.position = new Vector3(9.6f, position, 0);
+                    enemy.EnemyHit += EnemyHit;
                 }
 
                 _IntervalTime = 0.0f;
             }
         }
 
+        Debug.Log(_SpawnedEnemy.Count);
+
         // エネミーがいなくなった時の処理
         foreach(EnemyShip enemy in _SpawnedEnemy) { if(!enemy) { EnemyHit(1000); } }
-        _SpawnedEnemy = _SpawnedEnemy.Where(enemy => enemy != null);
+        _SpawnedEnemy = _SpawnedEnemy.Where(enemy => enemy).ToList();
 
         foreach(SubBossEnemy enemy in _SpawnedSubBossEnemy) { if(!enemy) { EnemyHit(3000); } }
-        _SpawnedSubBossEnemy = _SpawnedSubBossEnemy.Where(enemy => enemy != null);
+        _SpawnedSubBossEnemy = _SpawnedSubBossEnemy.Where(enemy => enemy).ToList();
 
         // プレイヤーがいなくなった時の処理
         if(!_SpawnedPlayer) { PlayerHit(); }

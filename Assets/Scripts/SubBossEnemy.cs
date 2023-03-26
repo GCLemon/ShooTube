@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,11 +16,18 @@ public class SubBossEnemy : MonoBehaviour
     GameObject playerShip;
     public GameObject explosion;
 
+    public event Action<ulong> EnemyHit
+    {
+        add => _EnemyHit += value;
+        remove => _EnemyHit -= value;
+    }
+    private Action<ulong> _EnemyHit;
+
     // Start is called before the first frame update
     void Start()
     {
-        float rnd = Random.Range(0.0f,3.0f);
-        float subBossPosition = Random.Range(0f,8f);
+        float rnd = UnityEngine.Random.Range(0.0f,3.0f);
+        float subBossPosition = UnityEngine.Random.Range(0f,8f);
 
         playerShip = GameObject.Find("PlayerShip");
         //生成時のコメントを取得し、Queueで1文字ずつ管理
@@ -195,5 +203,10 @@ public class SubBossEnemy : MonoBehaviour
             
         }
 
+    }
+
+    private void OnDestroy()
+    {
+        _EnemyHit(3000);
     }
 }

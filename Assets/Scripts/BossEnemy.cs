@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,13 @@ public class BossEnemy : MonoBehaviour
     public string bulletText;
     public Queue<string> letterQueue = new Queue<string>();
     public Queue<string> letterQueue2 = new Queue<string>();
+
+    public event Action<ulong> EnemyHit
+    {
+        add => _EnemyHit += value;
+        remove => _EnemyHit -= value;
+    }
+    private Action<ulong> _EnemyHit;
 
     GameObject playerShip;
     public GameObject explosion;
@@ -173,5 +181,10 @@ public class BossEnemy : MonoBehaviour
             
         }
 
+    }
+
+    private void OnDestroy()
+    {
+        _EnemyHit(5000);
     }
 }
