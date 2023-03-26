@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 
@@ -41,7 +42,11 @@ public class WaveManager : MonoBehaviour
 
     // エネミーオブジェクト
     [SerializeField] private EnemyShip _Enemy;
+    private List<EnemyShip> _SpawnedEnemy = new();
+
     [SerializeField] private SubBossEnemy _SubBossEnemy;
+    private List<SubBossEnemy> _SpawnedSubBossEndmy = new();
+
     [SerializeField] private BossEnemy _BossEnemy;
     private BossEnemy _SpawnedBossEnemy;
 
@@ -149,6 +154,7 @@ public class WaveManager : MonoBehaviour
             // ボスが消えたらモードを変更する
             if(!_SpawnedBossEnemy)
             {
+                EnemyHit(5000);
                 _IsBossMode = false;
                 _WaveIndex += 1;
                 _IntervalTime = 0.0f;
@@ -189,6 +195,13 @@ public class WaveManager : MonoBehaviour
                 _IntervalTime = 0.0f;
             }
         }
+
+        // エネミーがいなくなった時の処理
+        foreach(EnemyShip enemy in _SpawnedEnemy) { if(!enemy) { EnemyHit(1000); } }
+        _SpawnedEnemy = _SpawnedEnemy.Where(enemy => enemy != null);
+
+        foreach(SubBossEnemy enemy in _SpawnedSubBossEnemy) { if(!enemy) { EnemyHit(3000); } }
+        _SpawnedSubBossEnemy = _SpawnedSubBossEnemy.Where(enemy => enemy != null);
 
         // プレイヤーがいなくなった時の処理
         if(!_SpawnedPlayer) { PlayerHit(); }
