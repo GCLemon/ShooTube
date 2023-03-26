@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,13 @@ public class EnemyShip : MonoBehaviour
 
     float offset;
 
+    public event Action<ulong> EnemyHit
+    {
+        add => _EnemyHit += value;
+        remove => _EnemyHit -= value;
+    }
+    private Action<ulong> _EnemyHit;
+
     void Start()
     {
         //生成時のコメントを取得し、Queueで1文字ずつ管理
@@ -26,7 +34,7 @@ public class EnemyShip : MonoBehaviour
             letterQueue.Enqueue(s);
         }
 
-        offset = Random.Range(0, 2f * Mathf.PI);
+        offset = UnityEngine.Random.Range(0, 2f * Mathf.PI);
 
         //1s待ってから0.5s間隔で弾を打つ
         InvokeRepeating("Shooting", 1f, bulletTime);
@@ -72,5 +80,10 @@ public class EnemyShip : MonoBehaviour
             letterQueue = letterQueue2;
             letterQueue2 = new Queue<string>();
         }
+    }
+
+    private void OnDestroy()
+    {
+        _EnemyHit(1000);
     }
 }

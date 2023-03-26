@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068\u3053\u3081\u3093\u3068"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0a1d66c88604343258eecca675966476, type: 2}
-  m_sharedMaterial: {fileID: -117143504223073184, guid: 0a1d66c88604343258eecca675966476, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5d535b0ae234b4524aa1aa236d8f1325, type: 2}
+  m_sharedMaterial: {fileID: -6901086752411522576, guid: 5d535b0ae234b4524aa1aa236d8f1325, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -258,8 +258,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u3086\u30FC\u3056\u30FC\u306D\u30FC\u3080"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0a1d66c88604343258eecca675966476, type: 2}
-  m_sharedMaterial: {fileID: -117143504223073184, guid: 0a1d66c88604343258eecca675966476, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5d535b0ae234b4524aa1aa236d8f1325, type: 2}
+  m_sharedMaterial: {fileID: -6901086752411522576, guid: 5d535b0ae234b4524aa1aa236d8f1325, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
