@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class EnemyBullet : MonoBehaviour
 {
+    public float bulletSpeed = 1.5f;
     public Text bulletText;
     public GameObject explosion;
 
@@ -16,7 +17,7 @@ public class EnemyBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += new Vector3(-1.5f,0,0) * Time.deltaTime;
+        transform.position += transform.right * -bulletSpeed * Time.deltaTime;
 
         if(transform.position.x <= -11.5){
             Destroy(gameObject);
