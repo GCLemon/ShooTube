@@ -4,6 +4,19 @@ using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
+    // 現在のWave
+    private int _WaveIndex;
+
+    // エネミーが発射されてからの時間
+    private float _IntervalTime;
+    private float _BossIntervalTime;
+
+    // 現在発射されたエネミーの数
+    private int _EnemyCount;
+
+    // 現在がボスモードか？
+    private bool _IsBossMode;
+
     // 残機
     [SerializeField] private int _Life;
 
@@ -24,9 +37,13 @@ public class WaveManager : MonoBehaviour
 
     // プレイヤーオブジェクト
     [SerializeField] private PlayerControllerR _Player;
+    private PlayerControllerR _SpawnedPlayer;
 
     // エネミーオブジェクト
     [SerializeField] private EnemyShip _Enemy;
+    [SerializeField] private SubBossEnemy _SubBossEnemy;
+    [SerializeField] private BossEnemy _BossEnemy;
+    private BossEnemy _SpawnedBossEnemy;
 
     // メッセージ
     public string Message
@@ -100,6 +117,14 @@ public class WaveManager : MonoBehaviour
     // 初期化時の処理
     private void Start()
     {
+        _WaveIndex = 0;
+        _IntervalTime = 0.0f;
+        _BossIntervalTime = 0.0f;
+        _IsBossMode = false;
+
+        _SpawnedPlayer = Instantiate(_Player);
+        _SpawnedPlayer.transform.localPosition = new Vector3(-7, 0);
+
         _PlayerIcons = new();
         for(int i = 0; i < _Life; ++i)
         {
@@ -110,8 +135,63 @@ public class WaveManager : MonoBehaviour
         }
 
         _ScoreText = _ScoreTextObject.GetComponent<TextMeshProUGUI>();
+    }
 
-        InvokeRepeating(nameof(SpawnEnemy), 2f, 2f);
+    // 更新時の処理
+    private void Update()
+    {
+        // スコア表示の更新
+        _ScoreText.text = string.Format("{0:D10}", _Score);
+
+        // ボスモードの場合
+        if(_IsBossMode)
+        {
+            // ボスが消えたらモードを変更する
+            if(!_SpawnedBossEnemy)
+            {
+                _IsBossMode = false;
+                _WaveIndex += 1;
+                _IntervalTime = 0.0f;
+                _BossIntervalTime = 0.0f;
+            }
+        }
+
+        // それ以外の場合
+        else
+        {
+            // タイムを更新する
+            _IntervalTime += Time.deltaTime;
+            _BossIntervalTime += Time.deltaTime;
+
+            // 2分経過したらボスモードに移る
+            if(_BossIntervalTime >= 120.0f)
+            {
+                _SpawnedBossEnemy = Instantiate(_BossEnemy);
+                _BossEnemy.transform.position = new Vector3(9.6f, 0, 0);
+            }
+
+            // そうでない場合はザコを・30回に1回は中ボスを吐き出す
+            else if(_IntervalTime >= 2.0f / (_WaveIndex * 0.1f + 1.0f))
+            {
+                if((++_EnemyCount) % 30 == 0)
+                {
+                    SubBossEnemy enemy = Instantiate(_SubBossEnemy);
+                    float position = Random.Range(-4.0f, 4.0f);
+                    enemy.transform.position = new Vector3(9.6f, position, 0);
+                }
+                else
+                {
+                    EnemyShip enemy = Instantiate(_Enemy);
+                    float position = Random.Range(-4.0f, 4.0f);
+                    enemy.transform.position = new Vector3(9.6f, position, 0);
+                }
+
+                _IntervalTime = 0.0f;
+            }
+        }
+
+        // プレイヤーがいなくなった時の処理
+        if(!_SpawnedPlayer) { PlayerHit(); }
     }
 
     // エネミーを配置する
@@ -120,13 +200,6 @@ public class WaveManager : MonoBehaviour
         EnemyShip enemy = Instantiate(_Enemy);
         float position = Random.Range(-4.0f, 4.0f);
         enemy.transform.position = new Vector3(9.6f, position, 0);
-    }
-
-    // 更新時の処理
-    private void Update()
-    {
-        // スコア表示の更新
-        _ScoreText.text = string.Format("{0:D10}", _Score);
     }
 
     // エネミーがヒットした時のイベント
@@ -139,8 +212,12 @@ public class WaveManager : MonoBehaviour
     private void PlayerHit()
     {
         _Life -= 1;
-        Destroy(_PlayerIcons[_Life]);
-        _PlayerIcons.RemoveAt(_Life);
+        if(_Life > 0)
+        {
+            Destroy(_PlayerIcons[_Life]);
+            _PlayerIcons.RemoveAt(_Life);
+            _SpawnedPlayer = Instantiate(_Player);
+        }
     }
 
     // プレイヤーがエクステンドした時のイベント
