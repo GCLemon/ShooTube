@@ -9,7 +9,8 @@ public class EnemyGenerator : MonoBehaviour
     public float spawnTime;
 
     public GameObject enemyPrefab;
-    public GameObject enemyBulletPrefab;
+    public GameObject subBossPrefab;
+    public GameObject bossPrefab;
     public GetYutubeCommentR youTubeComment;
     public Queue<string> liveChatMassegeQueue = new Queue<string>();
     public Queue<string> userIconUrlQueue = new Queue<string>();
@@ -31,6 +32,8 @@ public class EnemyGenerator : MonoBehaviour
     //enemyをランダムに生成
     void Spawn()
     {
+        float num = UnityEngine.Random.Range(0.0f,1.0f);
+
         //コメントリストの最初の要素を取り出し
         if(liveChatMassegeQueue.TryDequeue(out textString)){
             liveChatMassegeLog.Add(textString);
@@ -54,9 +57,14 @@ public class EnemyGenerator : MonoBehaviour
             UnityEngine.Random.Range(-4.0f,4.0f),
             transform.position.z
         );
-        
         //Enemyを生成
-        Instantiate(enemyPrefab,spawnPosition,transform.rotation);
+        if(num >= 0.95f){
+            Instantiate(bossPrefab,spawnPosition,transform.rotation);
+        }else if(num >= 0.65f){
+            Instantiate(subBossPrefab,spawnPosition,transform.rotation);
+        }else{
+            Instantiate(enemyPrefab,spawnPosition,transform.rotation);
+        }
     }
 
     // Update is called once per frame
